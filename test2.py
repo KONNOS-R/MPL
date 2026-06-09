@@ -1,4 +1,4 @@
-from mpl import main as mpl
+import mpl.core as mpl
 
 mpl.create_playlist(
     ["/home/konnosr/Music/Internet/Mitski/Lush - needs fixes/04-Mitski-Real Men.flac"],

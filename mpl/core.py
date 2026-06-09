@@ -1,9 +1,10 @@
 import json
 import os
+import sys
 from pathlib import Path
 from typing import List, Optional, Dict
 
-from mpl import helpers
+import mpl.helpers as helpers
 
 
 # create an .mpl file
@@ -16,7 +17,7 @@ def create_playlist(file_list: List[str], output_path: str, playlist_name: Optio
 
     tracks = []
     for raw in file_list:
-        abs_path = helpers.validate_abs_path(raw)
+        abs_path = helpers.get_abs_path(raw)
         h = helpers.generate_hash(abs_path)
         tracks.append({
             "path": abs_path,
@@ -53,7 +54,6 @@ def load_playlist(playlist_path: str) -> List[str]:
 
     tracks = data.get("tracks", [])
     if not tracks:
-        import sys
         print("Warning: playlist is empty.", file=sys.stderr)
         return []
 
@@ -66,7 +66,6 @@ def load_playlist(playlist_path: str) -> List[str]:
         if os.path.isfile(abs_path):
             resolved.append(abs_path)
         else:
-            import sys
             print(f"Warning: missing file – {abs_path}", file=sys.stderr)
 
     return resolved
@@ -114,7 +113,7 @@ def repair_playlist(playlist_path: str, search_dirs: List[str]) -> int:
                     h = helpers.generate_hash(full)
                     hash_map.setdefault(h, full)
 
-                except (IOError, OSError):
+                except OSError:
                     continue
 
     updated = 0
