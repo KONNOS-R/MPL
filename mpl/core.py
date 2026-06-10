@@ -45,8 +45,12 @@ def load_playlist(playlist_path: str) -> List[str]:
     if not path.endswith(".mpl"):
         raise ValueError(f"Not an .mpl file: {path}")
 
-    with open(path, "r", encoding="utf-8") as f:
-        data = json.load(f)
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+
+    except json.JSONDecodeError as e:
+        raise ValueError(f"Invalid .mpl file: {path}") from e
 
     fmt = data.get("format", "")
     if not fmt.startswith("mpl/"):
@@ -74,12 +78,17 @@ def load_playlist(playlist_path: str) -> List[str]:
 # repair .mpl file
 def repair_playlist(playlist_path: str, search_dirs: List[str]) -> int:
 
-    playlist_path = os.path.abspath(os.path.expanduser(playlist_path))
-    if not playlist_path.endswith(".mpl"):
-        raise ValueError(f"Not an .mpl file: {playlist_path}")
+    path = os.path.abspath(os.path.expanduser(playlist_path))
 
-    with open(playlist_path, "r", encoding="utf-8") as f:
-        data = json.load(f)
+    if not path.endswith(".mpl"):
+        raise ValueError(f"Not an .mpl file: {path}")
+
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+
+    except json.JSONDecodeError as e:
+        raise ValueError(f"Invalid .mpl file: {path}") from e
 
     tracks = data.get("tracks", [])
     if not tracks:
@@ -98,6 +107,8 @@ def repair_playlist(playlist_path: str, search_dirs: List[str]) -> int:
         print("No missing tracks to repair.")
         return 0
 
+    AUDIO_EXTENSIONS = (".mp3", ".flac", ".wav", ".ogg")
+
     hash_map: Dict[str, str] = {}
     for directory in search_dirs:
         dir_path = os.path.abspath(os.path.expanduser(directory))
@@ -107,12 +118,15 @@ def repair_playlist(playlist_path: str, search_dirs: List[str]) -> int:
 
         for root, _, files in os.walk(dir_path):
             for fname in files:
-                full = os.path.join(root, fname)
+                # Only hash files with supported audio extensions
+                if not fname.lower().endswith(AUDIO_EXTENSIONS):
+                    continue
 
+                full = os.path.join(root, fname)
                 try:
                     h = helpers.generate_hash(full)
-                    hash_map.setdefault(h, full)
-
+                    if h not in hash_map:
+                        hash_map[h] = full
                 except OSError:
                     continue
 
@@ -124,7 +138,7 @@ def repair_playlist(playlist_path: str, search_dirs: List[str]) -> int:
             updated += 1
 
     if updated:
-        with open(playlist_path, "w", encoding="utf-8") as f:
+        with open(path, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=4, ensure_ascii=False)
 
     print(f"Repaired {updated} of {len(missing)} missing tracks.")

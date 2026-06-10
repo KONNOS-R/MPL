@@ -13,9 +13,11 @@ def generate_hash(path: str, chunk: int = 1_048_576) -> str:
             f.seek(-chunk, os.SEEK_END)
             tail = f.read(chunk)
             data = head + tail
+
     h = hashlib.sha256()
     h.update(data)
     h.update(str(size).encode())
+    
     return h.hexdigest()
 
 
