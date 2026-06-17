@@ -9,20 +9,33 @@ import mpl.helpers as helpers
 
 # create an .mpl file
 def create_playlist(file_list: List[str], output_path: str, playlist_name: Optional[str] = None) -> str:
-
     output_path = os.path.abspath(os.path.expanduser(output_path))
-    
+
     if not output_path.endswith(".mpl"):
         output_path += ".mpl"
 
+    AUDIO_EXTENSIONS = (".mp3", ".flac", ".wav", ".ogg")
+
     tracks = []
+
     for raw in file_list:
         abs_path = helpers.get_abs_path(raw)
+
+        if not os.path.isfile(abs_path):
+            print(f"Warning: file not found – {abs_path}", file=sys.stderr)
+            continue
+
+        if not abs_path.lower().endswith(AUDIO_EXTENSIONS):
+            print(f"Warning: unsupported audio format – {abs_path}", file=sys.stderr)
+
         h = helpers.generate_hash(abs_path)
         tracks.append({
             "path": abs_path,
             "hash": f"sha256:{h}"
         })
+
+    if not tracks:
+        raise ValueError("No valid audio files provided; playlist not created.")
 
     name = playlist_name or Path(output_path).stem
     playlist = {

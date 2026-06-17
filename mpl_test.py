@@ -1,5 +1,3 @@
-import sys
-
 import mpl.core as mpl
 
 
@@ -9,6 +7,7 @@ SAMPLE_TRACKS = [
     "/home/konnosr/Music/Internet/Big Thief/Two Hands/1.07 - Not.flac",
     "/home/konnosr/Music/Internet/Adrianne Lenker/songs/1.02 - ingydar.flac",
     "/home/konnosr/Music/Internet/Mitski/Bury Me At Makeout Creek/1.02 - Townie.flac",
+    "/home/konnosr/Projects/RhythmSync/playlists/pyproject.toml"
 ]
 
 
@@ -44,6 +43,7 @@ def test_repair(path=None, search_dirs=None):
     fixed = mpl.repair_playlist(path, search_dirs)
     print(f"  Fixed {fixed} track(s)\n")
     return fixed
+
 
 if __name__ == "__main__":
     while True:

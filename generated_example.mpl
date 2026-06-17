@@ -1,6 +1,6 @@
 {
     "format": "mpl/1.0",
-    "playlist_name": "My Chill Mix",
+    "playlist_name": "Test Playlist",
     "tracks": [
         {
             "path": "/home/konnosr/Music/Internet/Big Thief/Two Hands/1.07 - Not.flac",
@@ -13,6 +13,10 @@
         {
             "path": "/home/konnosr/Music/Internet/Mitski/Bury Me At Makeout Creek/1.02 - Townie.flac",
             "hash": "sha256:64775ff3ee5c4a049376aa84b9022a37557bc7506a1f541903f90d371ecb58af"
+        },
+        {
+            "path": "/home/konnosr/Projects/RhythmSync/playlists/pyproject.toml",
+            "hash": "sha256:052ee32d0c5dd202025590293621fe39e5d0d15a7189568681f9d3d6c403988a"
         }
     ]
 }
