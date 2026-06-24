@@ -1,6 +1,5 @@
 import json
 import os
-import sys
 from pathlib import Path
 from typing import List, Optional, Dict, Callable
 
@@ -59,7 +58,7 @@ def create_playlist(
 
 
 def load_playlist(
-    playlist_path: str,
+    playlist_path: Path,
     msg_callback: Optional[Callable[[str, str], None]] = None,
 ) -> List[str]:
 
@@ -99,7 +98,7 @@ def load_playlist(
 
 
 def repair_playlist(
-    playlist_path: str,
+    playlist_path: Path,
     search_dirs: List[str],
     msg_callback: Optional[Callable[[str, str], None]] = None,
 ) -> int:
