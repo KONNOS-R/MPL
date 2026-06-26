@@ -2,6 +2,11 @@ import os
 import hashlib
 
 
+# returns the supported audio extensions
+def get_audio_extensions():
+    return (".mp3", ".flac", ".wav", ".ogg")
+
+
 # generates a sha256 partial hash of the requested file
 def generate_hash(path: str, chunk: int = 1_048_576) -> str:
     size = os.path.getsize(path)

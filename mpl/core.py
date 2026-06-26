@@ -1,14 +1,14 @@
 import json
 import os
 from pathlib import Path
-from typing import List, Optional, Dict, Callable
+from typing import List, Optional, Dict, Callable, Union
 
-import mpl.helpers as helpers
+from . import helpers
 
 
 def create_playlist(
-    output_path: str,
-    file_list: List[str],
+    output_path: Union[str, Path],
+    file_list: List[Union[str, Path]],
     playlist_name: Optional[str] = None,
     msg_callback: Optional[Callable[[str, str], None]] = None,
 ) -> str:
@@ -21,7 +21,7 @@ def create_playlist(
     if not output_path.endswith(".mpl"):
         output_path += ".mpl"
 
-    AUDIO_EXTENSIONS = (".mp3", ".flac", ".wav", ".ogg")
+    AUDIO_EXTENSIONS = helpers.get_audio_extensions()
     tracks = []
 
     for raw in file_list:
@@ -58,7 +58,7 @@ def create_playlist(
 
 
 def load_playlist(
-    playlist_path: Path,
+    playlist_path: Union[str, Path],
     msg_callback: Optional[Callable[[str, str], None]] = None,
 ) -> List[str]:
 
@@ -98,7 +98,7 @@ def load_playlist(
 
 
 def repair_playlist(
-    playlist_path: Path,
+    playlist_path: Union[str, Path],
     search_dirs: List[str],
     msg_callback: Optional[Callable[[str, str], None]] = None,
 ) -> int:
@@ -138,7 +138,7 @@ def repair_playlist(
         _info("No missing tracks to repair.")
         return 0
 
-    AUDIO_EXTENSIONS = (".mp3", ".flac", ".wav", ".ogg")
+    AUDIO_EXTENSIONS = helpers.get_audio_extensions()
     hash_map: Dict[str, str] = {}
 
     for directory in search_dirs:
@@ -171,4 +171,5 @@ def repair_playlist(
             json.dump(data, f, indent=4, ensure_ascii=False)
 
     _info(f"Repaired {updated} of {len(missing)} missing tracks.")
+
     return updated
