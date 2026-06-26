@@ -8,14 +8,18 @@ found even after they've been moved or renamed.
 
 ``` json
 {
-  "format": "mpl/1.0",
-  "playlist_name": "My Chill Mix",
-  "tracks": [
-    {
-      "path": "/home/user/Music/Artist/Album/track1.flac",
-      "hash": "sha256:abc123..."
-    }
-  ]
+    "format": "mpl/1.0",
+    "playlist_name": "My Mix",
+    "tracks": [
+        {
+            "path": "~/Music/Artist/Album/track1.flac",
+            "hash": "abcd123..."
+        },
+        {
+            "path": "~/Downloads/song2.mp3",
+            "hash": "abcd123..."
+        }
+    ]
 }
 ```
 
@@ -25,8 +29,10 @@ found even after they've been moved or renamed.
 
 ## Installation
 
+**PyPI page:** [Click here](https://pypi.org/project/music-playlist-format)
+
 ``` 
-pip install mpl
+pip install music-playlist-format
 ```
 
 ## Usage
